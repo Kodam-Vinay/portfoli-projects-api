@@ -4,6 +4,12 @@ require("./connection");
 const { ProjectModel } = require("./model");
 const app = express();
 app.use(express.json());
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 const port = process.env.PORT || 8000;
 
 app.post("/projects-upload", async (req, res) => {
