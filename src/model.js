@@ -12,17 +12,17 @@ const projectSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    cloudinaryImageId: {
+    cloudinary_image_id: {
       required: true,
       type: String,
       default: null,
     },
-    gitHubUrl: {
+    github_url: {
       required: true,
       type: String,
       default: null,
     },
-    websiteUrl: {
+    website_url: {
       required: true,
       type: String,
       default: null,
