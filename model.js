@@ -10,7 +10,7 @@ const projectSchema = new mongoose.Schema(
       required: true,
       type: String,
     },
-    imageUrl: {
+    cloudinaryImageId: {
       required: true,
       type: String,
     },
