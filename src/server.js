@@ -1,9 +1,13 @@
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
 require("./connection");
 const { ProjectModel, ContactModel } = require("./model");
+const { sendMail } = require("./helper");
 const app = express();
 app.use(express.json());
+const static_path = path.join(__dirname, "emailTemplate/index.html");
+app.use(express.static(static_path));
 const cors = require("cors");
 app.use(
   cors({
@@ -82,6 +86,7 @@ app.post("/contact-details", async (req, res) => {
   try {
     const addContactDetails = new ContactModel(req.body);
     const saveProjectToDb = await addContactDetails.save();
+    await sendMail();
     res.status(201).send(saveProjectToDb);
   } catch (error) {
     res.status(400).send(error);
