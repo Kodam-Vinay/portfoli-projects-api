@@ -84,7 +84,7 @@ app.post("/contact-details", async (req, res) => {
     const saveProjectToDb = await addContactDetails.save();
     res.status(201).send(saveProjectToDb);
   } catch (error) {
-    res.status(400).send({ messge: "Please Provide Valid Details" }, error);
+    res.status(400).send(error);
   }
 });
 
@@ -97,7 +97,7 @@ app.get("/contact-details", async (req, res) => {
   }
 });
 
-app.delete("/contact-details/:id", async (req, res) => {
+app.delete("/contact-details", async (req, res) => {
   try {
     const deleteDetails = await ContactModel.findByIdAndDelete(req.params.id);
     if (!deleteDetails) {
