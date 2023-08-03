@@ -84,7 +84,7 @@ app.post("/contact-details", async (req, res) => {
     const saveProjectToDb = await addContactDetails.save();
     res.status(201).send(saveProjectToDb);
   } catch (error) {
-    res.status(400).statusMessage("Please Provide valid Details").send(error);
+    res.status(400).send({ error: "Please Provide valid Details" }, error);
   }
 });
 
