@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const projectSchema = new mongoose.Schema(
   {
@@ -38,4 +39,32 @@ const projectSchema = new mongoose.Schema(
 
 const ProjectModel = new mongoose.model("ProjectModel", projectSchema);
 
-module.exports = { ProjectModel };
+const contactSchema = new mongoose.Schema(
+  {
+    name: {
+      required: true,
+      type: String,
+    },
+    email: {
+      type: String,
+      validate: (value) => {
+        if (!validator.isEmail(value)) {
+          throw new Error("Email is not valid");
+        }
+      },
+    },
+    title: {
+      required: true,
+      type: String,
+    },
+    message: {
+      required: true,
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
+
+const ContactModel = new mongoose.model("ContactModel", contactSchema);
+
+module.exports = { ProjectModel, ContactModel };

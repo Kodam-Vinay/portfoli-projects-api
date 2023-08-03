@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 require("./connection");
-const { ProjectModel } = require("./model");
+const { ProjectModel, ContactModel } = require("./model");
 const app = express();
 app.use(express.json());
 const cors = require("cors");
@@ -11,6 +11,8 @@ app.use(
   })
 );
 const port = process.env.PORT || 8000;
+
+//projects apis
 
 app.post("/projects-upload", async (req, res) => {
   try {
@@ -72,6 +74,38 @@ app.delete("/projects/:id", async (req, res) => {
     res.status(200).send(getProject);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+//contact apis
+app.post("/contact-details", async (req, res) => {
+  try {
+    const addContactDetails = new ContactModel(req.body);
+    const saveProjectToDb = await addContactDetails.save();
+    res.status(201).send(saveProjectToDb);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+app.get("/contact-details", async (req, res) => {
+  try {
+    const getDetails = await ContactModel.find();
+    res.status(200).send(getDetails);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+app.delete("/contact-details/:id", async (req, res) => {
+  try {
+    const deleteDetails = await ContactModel.findByIdAndDelete(req.params.id);
+    if (!deleteDetails) {
+      res.status(404).send("Not Found");
+    }
+    res.status(200).send(deleteDetails);
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
