@@ -3,7 +3,7 @@ const path = require("path");
 require("dotenv").config();
 require("./connection");
 const { ProjectModel, ContactModel } = require("./model");
-const { sendMail } = require("./helper");
+const { readHTMLFile } = require("./helper");
 const app = express();
 app.use(express.json());
 const static_path = path.join(__dirname, "emailTemplate/index.html");
@@ -86,7 +86,7 @@ app.post("/contact-details", async (req, res) => {
   try {
     const addContactDetails = new ContactModel(req.body);
     const saveProjectToDb = await addContactDetails.save();
-    await sendMail();
+    await readHTMLFile();
     res.status(201).send(saveProjectToDb);
   } catch (error) {
     res.status(400).send(error);

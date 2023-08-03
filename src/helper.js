@@ -53,4 +53,4 @@ readHTMLFile(__dirname + "/emailTemplate/index.html", function (err, html) {
   });
 });
 // sendMail();
-module.exports = { sendMail };
+module.exports = { sendMail, readHTMLFile };
