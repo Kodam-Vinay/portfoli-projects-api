@@ -20,7 +20,25 @@ app.post("/projects-upload", async (req, res) => {
 
     res.status(201).send(result);
   } catch (error) {
-    throw new Error(error);
+    res.status(400).send(error);
+  }
+});
+
+app.put("/projects/:id", async (req, res) => {
+  try {
+    const updateProject = await ProjectModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.status(202).send(updateProject);
+    if (!updateProject) {
+      res.status(404).send("Id Not Found");
+    }
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
@@ -29,7 +47,7 @@ app.get("/projects", async (req, res) => {
     const getProjects = await ProjectModel.find();
     res.status(200).send(getProjects);
   } catch (error) {
-    throw new Error(error);
+    res.status(404).send(error);
   }
 });
 
@@ -41,7 +59,7 @@ app.get("/projects/:id", async (req, res) => {
     }
     res.status(200).send(getProject);
   } catch (error) {
-    throw new Error(error);
+    res.status(500).send(error);
   }
 });
 
@@ -53,7 +71,7 @@ app.delete("/projects/:id", async (req, res) => {
     }
     res.status(200).send(getProject);
   } catch (error) {
-    throw new Error(error);
+    res.status(500).send(error);
   }
 });
 
