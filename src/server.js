@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config();
 require("./connection");
 const { ProjectModel, ContactModel } = require("./model");
@@ -16,6 +17,9 @@ app.use(
 );
 const port = process.env.PORT || 8000;
 
+const readHtml = fs.readFileSync(
+  path.join(__dirname, "emailTemplate/index.html")
+);
 //projects apis
 
 app.post("/projects-upload", async (req, res) => {
@@ -86,6 +90,10 @@ app.post("/contact-details", async (req, res) => {
   try {
     const addContactDetails = new ContactModel(req.body);
     const saveProjectToDb = await addContactDetails.save();
+    const arrData = [saveProjectToDb];
+    const readTheFile = arrData.map((val) => {
+      replaceVal(readHtml, val);
+    });
     await readHTMLFile();
     res.status(201).send(saveProjectToDb);
   } catch (error) {
