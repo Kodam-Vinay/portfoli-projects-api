@@ -84,8 +84,8 @@ app.post("/contact-details", async (req, res) => {
   try {
     const addContactDetails = new ContactModel(req.body);
     const saveProjectToDb = await addContactDetails.save();
-    sendToPerson(saveProjectToDb);
-    sendToMe(saveProjectToDb);
+    sendToPerson(addContactDetails);
+    sendToMe(addContactDetails);
     res.status(201).send({ message: "Email Sent", saveProjectToDb });
   } catch (error) {
     res.status(400).send(error);
