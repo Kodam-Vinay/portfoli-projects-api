@@ -1,26 +1,20 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 require("dotenv").config();
 require("./connection");
 const { ProjectModel, ContactModel } = require("./model");
-const { readHTMLFile } = require("./helper");
+const cors = require("cors");
+const readHtmlFile = require("./helper");
+
 const app = express();
 app.use(express.json());
-const static_path = path.join(__dirname, "emailTemplate/index.html");
-app.use(express.static(static_path));
-const cors = require("cors");
+
 app.use(
   cors({
     origin: "*",
   })
 );
 const port = process.env.PORT || 8000;
-
-const readHtml = fs.readFileSync(
-  path.join(__dirname, "emailTemplate/index.html")
-);
-//projects apis
 
 app.post("/projects-upload", async (req, res) => {
   try {
@@ -90,12 +84,8 @@ app.post("/contact-details", async (req, res) => {
   try {
     const addContactDetails = new ContactModel(req.body);
     const saveProjectToDb = await addContactDetails.save();
-    const arrData = [saveProjectToDb];
-    const readTheFile = arrData.map((val) => {
-      replaceVal(readHtml, val);
-    });
-    await readHTMLFile();
-    res.status(201).send(saveProjectToDb);
+    readHtmlFile(saveProjectToDb);
+    res.status(201).send({ message: "Email Sent", saveProjectToDb });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -110,7 +100,7 @@ app.get("/contact-details", async (req, res) => {
   }
 });
 
-app.delete("/contact-details", async (req, res) => {
+app.delete("/contact-details/:id", async (req, res) => {
   try {
     const deleteDetails = await ContactModel.findByIdAndDelete(req.params.id);
     if (!deleteDetails) {

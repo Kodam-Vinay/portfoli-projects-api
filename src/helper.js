@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const fs = require("fs");
+const path = require("path");
 const handlebars = require("handlebars");
 require("dotenv").config();
 const { USER_EMAIL, PASSWORD } = process.env;
@@ -14,42 +15,27 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = () => {
-  const info = transporter.sendMail({
-    from: USER_EMAIL,
-    to: "vinay.kodam112@gmail.com",
-    subject: "random",
-    text: "nothing",
-    html: "hello",
-  });
-};
-
-var readHTMLFile = function (path, callback) {
-  fs.readFile(path, { encoding: "utf-8" }, function (err, html) {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, html);
-    }
-  });
-};
-
-readHTMLFile(__dirname + "/emailTemplate/index.html", function (err, html) {
-  if (err) {
-    console.log("error reading file", err);
-    return;
-  }
-  var template = handlebars.compile(html);
-  var replacements = {
-    username: "John Doe",
+const readHtmlFile = async (saveProjectToDb) => {
+  const htmlFile = fs
+    .readFileSync(path.join(__dirname, "emailTemplate/index.html"), "utf-8")
+    .toString();
+  const template = handlebars.compile(htmlFile);
+  const replacements = {
+    name: saveProjectToDb.name,
+    title: saveProjectToDb.title,
+    message: saveProjectToDb.message,
+    email: saveProjectToDb.email,
   };
-  var htmlToSend = template(replacements);
-  const info = transporter.sendMail({
+  const htmlToSend = template(replacements);
+
+  const info = await transporter.sendMail({
     from: USER_EMAIL,
     to: "vinay.kodam112@gmail.com",
-    subject: "random",
-    text: "nothing",
+    subject: "test",
+    text: "email testing",
     html: htmlToSend,
   });
-});
-module.exports = { readHTMLFile };
+  console.log("Message sent", info.response);
+};
+
+module.exports = readHtmlFile;
