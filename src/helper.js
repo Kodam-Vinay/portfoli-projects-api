@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const readHtmlFile = async (saveProjectToDb) => {
+const sendToMe = async (saveProjectToDb) => {
   const htmlFile = fs
     .readFileSync(path.join(__dirname, "emailTemplate/index.html"), "utf-8")
     .toString();
@@ -31,11 +31,32 @@ const readHtmlFile = async (saveProjectToDb) => {
   const info = await transporter.sendMail({
     from: USER_EMAIL,
     to: "vinay.kodam112@gmail.com",
-    subject: "test",
-    text: "email testing",
+    subject: "contact",
     html: htmlToSend,
   });
-  console.log("Message sent", info.response);
+  console.log("Message sent");
 };
 
-module.exports = readHtmlFile;
+const sendToPerson = async (saveProjectToDb) => {
+  const htmlFile = fs
+    .readFileSync(
+      path.join(__dirname, "emailTemplate/sendToPerson.html"),
+      "utf-8"
+    )
+    .toString();
+  const template = handlebars.compile(htmlFile);
+  const replacements = {
+    name: saveProjectToDb.name,
+  };
+  const htmlToSend = template(replacements);
+
+  const info = await transporter.sendMail({
+    from: USER_EMAIL,
+    to: saveProjectToDb.email,
+    subject: "Thanks for Contacting Us",
+    html: htmlToSend,
+  });
+  console.log("Message sent");
+};
+
+module.exports = { sendToMe, sendToPerson };
