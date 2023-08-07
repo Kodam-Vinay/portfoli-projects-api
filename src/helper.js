@@ -58,7 +58,7 @@ const sendToPerson = async (saveProjectToDb) => {
     .toString();
   const template = handlebars.compile(htmlFile);
   const replacements = {
-    name: "Testing",
+    name: saveProjectToDb.name,
   };
   const htmlToSend = template(replacements);
 
