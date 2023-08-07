@@ -4,7 +4,7 @@ require("dotenv").config();
 require("./connection");
 const { ProjectModel, ContactModel } = require("./model");
 const cors = require("cors");
-const { sendToMe, sendToPerson } = require("./helper");
+const { sendToPerson, sendToMe } = require("./helper");
 
 const app = express();
 app.use(express.json());
@@ -84,8 +84,8 @@ app.post("/contact-details", async (req, res) => {
   try {
     const addContactDetails = new ContactModel(req.body);
     const saveProjectToDb = await addContactDetails.save();
-    sendToPerson(addContactDetails);
-    sendToMe(addContactDetails);
+    sendToPerson(saveProjectToDb);
+    sendToMe(saveProjectToDb);
     res.status(201).send({ message: "Email Sent", saveProjectToDb });
   } catch (error) {
     res.status(400).send(error);

@@ -3,15 +3,27 @@ const fs = require("fs");
 const path = require("path");
 const handlebars = require("handlebars");
 require("dotenv").config();
-const { USER_EMAIL, PASSWORD } = process.env;
+const { USER_EMAIL1, PASSWORD1, USER_EMAIL2, PASSWORD2 } = process.env;
 
-const transporter = nodemailer.createTransport({
+const transporter1 = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
   auth: {
-    user: USER_EMAIL,
-    pass: PASSWORD,
+    user: USER_EMAIL1,
+    pass: PASSWORD1,
+  },
+});
+
+const transporter2 = nodemailer.createTransport({
+  host: "smtp-mail.outlook.com",
+  port: 587,
+  tls: {
+    ciphers: "SSLv3",
+    rejectUnauthorized: false,
+  },
+  auth: {
+    user: USER_EMAIL2,
+    pass: PASSWORD2,
   },
 });
 
@@ -28,13 +40,13 @@ const sendToMe = async (saveProjectToDb) => {
   };
   const htmlToSend = template(replacements);
 
-  const info = await transporter.sendMail({
-    from: USER_EMAIL,
+  const info = await transporter1.sendMail({
+    from: USER_EMAIL1,
     to: "vinay.kodam112@gmail.com",
     subject: "contact",
     html: htmlToSend,
   });
-  console.log("Message sent");
+  console.log("Message sent to Me");
 };
 
 const sendToPerson = async (saveProjectToDb) => {
@@ -46,17 +58,17 @@ const sendToPerson = async (saveProjectToDb) => {
     .toString();
   const template = handlebars.compile(htmlFile);
   const replacements = {
-    name: saveProjectToDb.name,
+    name: "Testing",
   };
   const htmlToSend = template(replacements);
 
-  const info = await transporter.sendMail({
-    from: USER_EMAIL,
+  const info = await transporter2.sendMail({
+    from: USER_EMAIL2,
     to: saveProjectToDb.email,
     subject: "Thanks for Contacting Us",
     html: htmlToSend,
   });
-  console.log("Message sent");
+  console.log("Message sent to person");
 };
 
-module.exports = { sendToMe, sendToPerson };
+module.exports = { sendToPerson, sendToMe };
