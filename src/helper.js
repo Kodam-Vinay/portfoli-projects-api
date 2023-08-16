@@ -3,7 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const handlebars = require("handlebars");
 require("dotenv").config();
-const { USER_EMAIL1, PASSWORD1, USER_EMAIL2, PASSWORD2 } = process.env;
+const { USER_EMAIL1, PASSWORD1, USER_EMAIL2, PASSWORD2, RECIEVER_EMAIL } =
+  process.env;
 
 const transporter1 = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -42,7 +43,7 @@ const sendToMe = async (saveProjectToDb) => {
 
   const info = await transporter1.sendMail({
     from: USER_EMAIL1,
-    to: "vinay.kodam112@gmail.com",
+    to: RECIEVER_EMAIL,
     subject: "contact",
     html: htmlToSend,
   });
