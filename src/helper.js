@@ -41,7 +41,7 @@ const sendToMe = async (saveProjectToDb) => {
   };
   const htmlToSend = template(replacements);
 
-  const info = await transporter1.sendMail({
+  const info = await transporter2.sendMail({
     from: USER_EMAIL2,
     to: RECIEVER_EMAIL,
     subject: "contact",
@@ -63,7 +63,7 @@ const sendToPerson = async (saveProjectToDb) => {
   };
   const htmlToSend = template(replacements);
 
-  const info = await transporter2.sendMail({
+  const info = await transporter1.sendMail({
     from: USER_EMAIL1,
     to: saveProjectToDb.email,
     subject: "Thanks for Contacting Us",
