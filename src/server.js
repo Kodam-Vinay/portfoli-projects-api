@@ -49,7 +49,8 @@ app.put("/projects/:id", async (req, res) => {
 app.get("/projects", async (req, res) => {
   try {
     const getProjects = await ProjectModel.find();
-    res.status(200).send(getProjects);
+    const result = getProjects.reverse();
+    res.status(200).send(result);
   } catch (error) {
     res.status(404).send(error);
   }
