@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const path = require("path");
 require("dotenv").config();
 require("./connection");
@@ -111,6 +112,26 @@ app.delete("/contact-details/:id", async (req, res) => {
     res.status(200).send(deleteDetails);
   } catch (error) {
     res.status(400).send(error);
+  }
+});
+
+app.post("/secret-login", async (req, res) => {
+  try {
+    const userDetails = req.body;
+    const { userName, password } = userDetails;
+    if (
+      userName === process.env.USER_NAME &&
+      password === process.env.PASSWORD
+    ) {
+      const jwtToken = jwt.sign(userDetails, process.env.SECRET_KEY);
+      res.status(200).send({ message: "Login SuccessFul", jwt: jwtToken });
+    } else {
+      res
+        .status(400)
+        .send({ message: "Only Admins Can Access to this Section" });
+    }
+  } catch (error) {
+    res.status(500).send("Internal Error");
   }
 });
 
