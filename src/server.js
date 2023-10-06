@@ -127,7 +127,7 @@ app.post("/secret-login", async (req, res) => {
       res.status(200).send({ message: "Login SuccessFul", jwt: jwtToken });
     } else {
       res
-        .status(400)
+        .status(404)
         .send({ message: "Only Admins Can Access to this Section" });
     }
   } catch (error) {
