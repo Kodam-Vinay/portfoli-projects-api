@@ -17,7 +17,7 @@ app.use(
 const port = process.env.PORT || 8001;
 
 app.use("/api/projects", projectRouter);
-app.use("/api/contact", contactRouter);
+app.use("/api/contacts", contactRouter);
 
 app.post("/api/users/login", async (req, res) => {
   try {
