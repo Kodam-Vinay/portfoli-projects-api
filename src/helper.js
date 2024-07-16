@@ -76,8 +76,8 @@ const sendToPerson = async (saveProjectToDb) => {
 const authorizeUser = async (req, res, next) => {
   const authHeader = req?.headers["authorization"];
   if (authHeader) {
-    const jwt = authHeader?.split(" ")[1];
-    jwt.verify(jwt, process.env.SECRET_KEY, (error, decoded) => {
+    const token = authHeader?.split(" ")[1];
+    jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
       if (error) {
         return res.status(401).send({ message: "Unauthorized User" });
       }
