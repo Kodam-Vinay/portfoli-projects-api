@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const path = require("path");
 const handlebars = require("handlebars");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { USER_EMAIL1, PASSWORD1, USER_EMAIL2, PASSWORD2, RECIEVER_EMAIL } =
   process.env;
@@ -72,4 +73,20 @@ const sendToPerson = async (saveProjectToDb) => {
   console.log("Message sent to person");
 };
 
-module.exports = { sendToPerson, sendToMe };
+const authorizeUser = async (req, res, next) => {
+  const authHeader = req?.headers["authorization"];
+  if (authHeader) {
+    const jwt = authHeader?.split(" ")[1];
+    jwt.verify(jwt, process.env.SECRET_KEY, (error, decoded) => {
+      if (error) {
+        return res.status(401).send({ message: "Unauthorized User" });
+      }
+      req.user = decoded;
+      next();
+    });
+  } else {
+    res.status(401).send({ message: "Unauthorized User" });
+  }
+};
+
+module.exports = { sendToPerson, sendToMe, authorizeUser };
