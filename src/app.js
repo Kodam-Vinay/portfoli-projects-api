@@ -1,7 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-require("dotenv").config();
 require("./connection");
 const { ProjectModel, ContactModel } = require("./model");
 const cors = require("cors");
@@ -15,7 +15,7 @@ app.use(
     origin: "*",
   })
 );
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
 
 app.post("/projects-upload", async (req, res) => {
   try {
