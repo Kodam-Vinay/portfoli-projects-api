@@ -31,7 +31,6 @@ const postContactDetails = async (req, res) => {
       .status(201)
       .send({ status: true, message: "Successfully Sent a Message" });
   } catch (error) {
-    console.log(error.message);
     res.status(400).send({ status: false, message: "Something went wrong" });
   }
 };
