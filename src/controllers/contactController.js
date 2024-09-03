@@ -1,13 +1,21 @@
 const { sendToPerson, sendToMe } = require("../utils/helper");
 const ContactModel = require("../db/models/contactModel");
+const validator = require("validator");
 
 const postContactDetails = async (req, res) => {
   try {
     const { name, email, title, message } = req.body;
+
     if (!name || !email || !title || !message) {
       return res
         .status(400)
         .send({ status: false, message: "Please fill in all fields" });
+    }
+
+    if (!validator.isEmail(email)) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Please Enter a Valid Email" });
     }
 
     const newContactDetails = new ContactModel({
@@ -23,6 +31,7 @@ const postContactDetails = async (req, res) => {
       .status(201)
       .send({ status: true, message: "Successfully Sent a Message" });
   } catch (error) {
+    console.log(error.message);
     res.status(400).send({ status: false, message: "Something went wrong" });
   }
 };

@@ -8,11 +8,6 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      validate: (value) => {
-        if (!validator.isEmail(value)) {
-          throw new Error("Email is not valid");
-        }
-      },
     },
     title: {
       required: true,

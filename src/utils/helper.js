@@ -31,7 +31,7 @@ const transporter2 = nodemailer.createTransport({
 
 const sendToMe = async (saveProjectToDb) => {
   const htmlFile = fs
-    .readFileSync(path.join(__dirname, "emailTemplate/index.html"), "utf-8")
+    .readFileSync(path.join(__dirname, "../emailTemplate/index.html"), "utf-8")
     .toString();
   const template = handlebars.compile(htmlFile);
   const replacements = {
@@ -42,21 +42,17 @@ const sendToMe = async (saveProjectToDb) => {
   };
   const htmlToSend = template(replacements);
 
-  const info = await transporter1.sendMail({
+  await transporter1.sendMail({
     from: USER_EMAIL1,
     to: RECIEVER_EMAIL,
     subject: "contact",
     html: htmlToSend,
   });
-  console.log("Message sent to Me");
 };
 
 const sendToPerson = async (saveProjectToDb) => {
   const htmlFile = fs
-    .readFileSync(
-      path.join(__dirname, "emailTemplate/sendToPerson.html"),
-      "utf-8"
-    )
+    .readFileSync(path.join(__dirname, "../emailTemplate/index.html"), "utf-8")
     .toString();
   const template = handlebars.compile(htmlFile);
   const replacements = {
@@ -64,13 +60,12 @@ const sendToPerson = async (saveProjectToDb) => {
   };
   const htmlToSend = template(replacements);
 
-  const info = await transporter2.sendMail({
+  await transporter2.sendMail({
     from: USER_EMAIL2,
     to: saveProjectToDb.email,
     subject: "Thanks for Contacting Us",
     html: htmlToSend,
   });
-  console.log("Message sent to person");
 };
 
 const authorizeUser = async (req, res, next) => {
