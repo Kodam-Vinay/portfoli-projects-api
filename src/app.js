@@ -1,10 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
-require("./connection");
+require("./db/connection");
 const cors = require("cors");
-const { projectRouter } = require("./projectRouter");
-const { contactRouter } = require("./contactRouter");
+const projectRouter = require("./Routes/projectRouter");
+const contactRouter = require("./Routes/contactRouter");
 
 const app = express();
 app.use(express.json());

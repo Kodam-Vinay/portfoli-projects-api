@@ -1,7 +1,28 @@
-const { ProjectModel } = require("./model");
+const ProjectModel = require("../db/models/projectModel");
 
 const uploadProject = async (req, res) => {
   try {
+    const {
+      name,
+      description,
+      cloudinary_image_id,
+      github_url,
+      website_url,
+      technolgies,
+    } = req.body;
+    if (
+      !name ||
+      !description ||
+      !cloudinary_image_id ||
+      !github_url ||
+      !website_url ||
+      !technolgies
+    ) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Please fill in all fields" });
+    }
+
     const newProject = req.body;
     const projectSave = new ProjectModel(newProject);
     await projectSave.save();
@@ -15,7 +36,7 @@ const uploadProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     if (!id) {
       return res
         .status(404)
@@ -65,12 +86,22 @@ const deleteProject = async (req, res) => {
 
 const getAllProjects = async (req, res) => {
   try {
-    const getProjects = await ProjectModel.find();
-    const result = getProjects.reverse();
-    res.status(201).send({
+    const getProjects = await ProjectModel.find().sort({ createdAt: -1 });
+    const filterPojectDetails = getProjects.map((eachProject) => {
+      return {
+        _id: eachProject._id,
+        name: eachProject.name,
+        description: eachProject.description,
+        cloudinary_image_id: eachProject.cloudinary_image_id,
+        github_url: eachProject.github_url,
+        website_url: eachProject.website_url,
+        technolgies: eachProject.technolgies,
+      };
+    });
+    const result = res.status(201).send({
       status: true,
       message: "Projects Retrieved Successfully",
-      data: result,
+      data: filterPojectDetails,
     });
   } catch (error) {
     res.status(400).send({ status: false, message: "Something went wrong" });

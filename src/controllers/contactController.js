@@ -1,10 +1,22 @@
-const { sendToPerson, sendToMe } = require("./helper");
-const { ContactModel } = require("./model");
+const { sendToPerson, sendToMe } = require("../utils/helper");
+const ContactModel = require("../db/models/contactModel");
 
 const postContactDetails = async (req, res) => {
   try {
-    const addContactDetails = new ContactModel(req.body);
-    const saveProjectToDb = await addContactDetails.save();
+    const { name, email, title, message } = req.body;
+    if (!name || !email || !title || !message) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Please fill in all fields" });
+    }
+
+    const newContactDetails = new ContactModel({
+      name: name,
+      message: message,
+      title: title,
+      email: email,
+    });
+    const saveProjectToDb = await newContactDetails.save();
     await sendToPerson(saveProjectToDb);
     await sendToMe(saveProjectToDb);
     res

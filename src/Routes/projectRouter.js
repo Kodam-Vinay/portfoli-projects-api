@@ -4,16 +4,15 @@ const {
   getAllProjects,
   getProject,
   deleteProject,
-} = require("./projectController");
-const { authorizeUser } = require("./helper");
+  updateProject,
+} = require("../controllers/projectController");
+const { authorizeUser } = require("../utils/helper");
 const router = express.Router();
 
 router.post("/upload", authorizeUser, uploadProject);
-router.put("/:id", authorizeUser, uploadProject);
+router.put("/:id", authorizeUser, updateProject);
 router.get("/all", getAllProjects);
 router.get("/:id", getProject);
 router.delete("/:id", authorizeUser, deleteProject);
 
-module.exports = {
-  projectRouter: router,
-};
+module.exports = router;
