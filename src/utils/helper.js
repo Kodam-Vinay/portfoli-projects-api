@@ -84,4 +84,22 @@ const authorizeUser = async (req, res, next) => {
   }
 };
 
-module.exports = { sendToPerson, sendToMe, authorizeUser };
+const authorizeUserForProjects = async (req, res, next) => {
+  const authHeader = req?.headers["authorization"];
+  if (authHeader) {
+    const token = authHeader?.split(" ")[1];
+    if (token !== process.env.PROJECT_ACCESS_TOKEN) {
+      return res.status(401).send({ message: "Unauthorized User" });
+    }
+    next();
+  } else {
+    res.status(401).send({ message: "Unauthorized User" });
+  }
+};
+
+module.exports = {
+  sendToPerson,
+  sendToMe,
+  authorizeUser,
+  authorizeUserForProjects,
+};
